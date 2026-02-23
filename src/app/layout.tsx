@@ -1,7 +1,32 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { ClerkProvider } from "@clerk/nextjs";
+import { ClerkLoaded, ClerkLoading, ClerkProvider } from "@clerk/nextjs";
 import { Providers } from "./providers";
+import "./globals.css";
+import localFont from "next/font/local";
+import { ThemeProvider } from "next-themes";
+import Header from "./componenets/header";
+
+const SFPROTEXTFont = localFont({
+  src: [
+    {
+      path: "../../public/fonts/SF-Pro-Text-Bold.otf",
+      style: "normal",
+      weight: "700",
+    },
+    {
+      path: "../../public/fonts/SF-Pro-Text-Semibold.otf",
+      style: "normal",
+      weight: "600",
+    },
+    {
+      path: "../../public/fonts/SF-Pro-Text-Regular.otf",
+      style: "normal",
+      weight: "400",
+    },
+  ],
+  display: "swap",
+  variable: "--font-apple",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,8 +41,18 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body>
-          <Providers>{children}</Providers>
+        <body className={`${SFPROTEXTFont.variable}`}>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <Providers>
+              <ClerkLoading>
+                <div className="loading-page"></div>
+              </ClerkLoading>
+              <ClerkLoaded>
+                <Header />
+                {children}
+              </ClerkLoaded>
+            </Providers>
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>

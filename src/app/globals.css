@@ -1,26 +1,176 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-apple: var(--font-apple);
+}
+:root {
+  /* ===== TEXT ===== */
+  --title: #111827;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+
+  /* ===== SIDEBAR ===== */
+  --bg-sidebar: #ffffff;
+  --bg-hover: #f3f4f6;
+  --bg-search: #f3f4f6;
+  --bg-pill: #f3f4f6;
+  --bg-pill-hover: #e5e7eb;
+  --bg-active-pill: #22c55e;
+
+  /* ===== CHAT AREA ===== */
+  --bg-chat: #efeae2;
+  --bg-header: #ffffff;
+  --bg-input: #ffffff;
+
+  /* ===== MESSAGE BUBBLES ===== */
+  --bubble-sent: #d9fdd3;
+  --bubble-received: #ffffff;
+
+  /* ===== BORDERS ===== */
+  --border-default: #e5e7eb;
+  --border-input: #e7e7ed;
+
+  /* ===== INPUT ===== */
+  --input-bg: #f1f2f5;
+
+  /* ===== ICONS ===== */
+  --icon-color: #374151;
+
+  /* ===== DATE ===== */
+  --date-bg: rgba(0, 0, 0, 0.08);
+  --date-text: #4b5563;
+
+  /* ===== TICKS ===== */
+  --tick-sent: #6b7280;
+  --tick-delivered: #6b7280;
+  --tick-read: #3b82f6;
+
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.08);
+
+  --bg-header-main: #f5f0f0; /* soft gray like WhatsApp */
+  --header-text: #111827;
+
+  --dropdown-bg: #ffffff;
+  --dropdown-hover: #e9edef;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --title: #f9fafb;
+    --text-primary: #f3f4f6;
+    --text-secondary: #9ca3af;
+    --text-muted: #6b7280;
+
+    --bg-sidebar: #111827;
+    --bg-hover: #1f2937;
+    --bg-search: #1f2937;
+    --bg-pill: #1f2937;
+    --bg-pill-hover: #374151;
+
+    --bg-chat: #0b141a;
+    --bg-header: #111827;
+    --bg-input: #202c33;
+
+    --bubble-sent: #005c4b;
+    --bubble-received: #202c33;
+
+    --border-default: #374151;
+    --border-input: #2a2b32;
+
+    --input-bg: #1f1f23;
+
+    --icon-color: #d1d5db;
+
+    --date-bg: rgba(255, 255, 255, 0.08);
+    --date-text: #d1d5db;
+
+    --tick-sent: #9ca3af;
+    --tick-delivered: #9ca3af;
+    --tick-read: #60a5fa;
+
+    --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.5);
+
+    --bg-header-main: #111827;
+    --header-text: #f3f4f6;
+
+    --dropdown-bg: #1f2937;
+    --dropdown-hover: #374151;
+  }
+}
+.common-button {
+  border-radius: 12px;
+  background: #fb5650;
+  padding: 14px 16px;
+  font-weight: 600;
+  font-size: 16.5px;
+  line-height: 125%;
+  cursor: pointer;
+  height: 42px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8;
+}
+.common-button::after {
+  content: "";
+  height: 100%;
+  background-color: #d23d37;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 0 !important;
+  animation: hoverOut 0.5s forwards linear;
+}
+.common-button:hover::after {
+  animation: hoverIn 0.5s forwards linear;
+}
+
+@keyframes hoverIn {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes hoverOut {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+  }
+}
+
+.link-hover::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0px;
+  width: 0px;
+  transition: width 0.5s ease-in-out;
+  height: 2.2px;
+  background-color: #fb5650;
+}
+
+.link-hover:hover::after {
+  width: 100%;
+}
+
+.loading-page {
+  display: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 75vh;
+  opacity: 0.5;
+  background-image: url("../../public/images/loader.webp");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 250px 250px;
 }
