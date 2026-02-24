@@ -1,31 +1,66 @@
 "use client";
-import { useState } from "react";
-
-const contacts = [
-  { id: 1, name: "Priti", avatar: "https://i.pravatar.cc/40?img=1" },
-  { id: 2, name: "Papa Je", avatar: "https://i.pravatar.cc/40?img=2" },
-  { id: 3, name: "Ankit", avatar: "https://i.pravatar.cc/40?img=3" },
-  { id: 4, name: "Kunal", avatar: "https://i.pravatar.cc/40?img=4" },
-  {
-    id: 5,
-    name: "Reserve Bank of India",
-    avatar: "https://i.pravatar.cc/40?img=5",
-  },
-];
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { api } from "../../../convex/_generated/api";
+import { useMutation, useQuery } from "convex/react";
+import { useUser } from "@clerk/nextjs";
+import { UserModel } from "../models/models";
+import { DateFormatter } from "./../utils/date-formatter";
+import { getUserStatus } from "../utils/user-status";
+import { useTheme } from "next-themes";
 
 type ChatSidebarProps = {
   onSelectChat: () => {};
+  setSelectedUser: Dispatch<SetStateAction<UserModel | undefined>>;
 };
 
-function ChatSidebar({ onSelectChat }: ChatSidebarProps) {
+function ChatSidebar({ onSelectChat, setSelectedUser }: ChatSidebarProps) {
   const [query, setQuery] = useState("");
+  const allUsers: UserModel[] | undefined = useQuery(api.users.getAllUsers);
+  const [filteredUser, setFilteredUser] = useState<UserModel[]>([]);
+  const { user } = useUser();
 
-  const filtered =
-    query.trim() === ""
-      ? []
-      : contacts.filter((c) =>
-          c.name.toLowerCase().includes(query.toLowerCase()),
-        );
+  const getCurrentUser = useQuery(api.users.getUserByClerkId, {
+    clerkId: (user && user.id) ?? "skip",
+  });
+
+  const getUserConversations = useQuery(
+    api.conversations.getUserConversations,
+    getCurrentUser ? { userId: getCurrentUser._id } : "skip",
+  );
+
+  const tickAllmessagesRead = useMutation(
+    api.messages.markMessagesAsSeenByUsers,
+  );
+
+  const [selectedUserBackground, setSelectedUserBackground] = useState("");
+
+  const { resolvedTheme } = useTheme();
+
+  useEffect(() => {
+    const filtered =
+      query.trim() === ""
+        ? []
+        : allUsers?.filter((c: UserModel) => {
+            if (user?.id != c.clerkId) {
+              return c.name.toLowerCase().includes(query.toLowerCase());
+            }
+            return false;
+          });
+    if (filtered) setFilteredUser(filtered);
+  }, [query]);
+
+  async function onUserSelected(user: UserModel) {
+    setSelectedUserBackground(user.clerkId);
+
+    if (getUserConversations && getCurrentUser) {
+      await tickAllmessagesRead({
+        user2: user._id,
+        user1: getCurrentUser._id,
+      });
+    }
+
+    setSelectedUser(user);
+  }
 
   return (
     <div
@@ -36,7 +71,6 @@ function ChatSidebar({ onSelectChat }: ChatSidebarProps) {
         borderColor: "var(--border-default)",
       }}
     >
-      {/* Header */}
       <div
         className="flex items-center justify-between p-4 border-b"
         style={{ borderColor: "var(--border-default)" }}
@@ -68,10 +102,10 @@ function ChatSidebar({ onSelectChat }: ChatSidebarProps) {
               border: "1px solid var(--border-default)",
             }}
           >
-            {filtered.length > 0 ? (
-              filtered.map((c) => (
+            {filteredUser.length > 0 ? (
+              filteredUser.map((c) => (
                 <div
-                  key={c.id}
+                  key={c._id}
                   className="flex items-center gap-3 px-4 py-3 cursor-pointer transition"
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.background = "var(--bg-hover)")
@@ -80,12 +114,12 @@ function ChatSidebar({ onSelectChat }: ChatSidebarProps) {
                     (e.currentTarget.style.background = "transparent")
                   }
                   onClick={() => {
-                    setQuery(c.name); // fill input
-                    alert(`Open chat with ${c.name}`);
+                    setQuery("");
+                    onUserSelected(c);
+                    setFilteredUser([]);
                   }}
                 >
-                  <img src={c.avatar} className="w-10 h-10 rounded-full" />
-
+                  <img src={c.imageUrl} className="w-10 h-10 rounded-full" />
                   <span className="font-medium">{c.name}</span>
                 </div>
               ))
@@ -101,29 +135,70 @@ function ChatSidebar({ onSelectChat }: ChatSidebarProps) {
         )}
       </div>
 
-      {/* Example Chat Item */}
-      <div className="flex items-center gap-3 px-4 py-3" onClick={onSelectChat}>
-        <img
-          src="https://i.pravatar.cc/40"
-          className="w-10 h-10 rounded-full"
-        />
+      {getUserConversations?.map((conv) => (
+        <div
+          key={conv.conversationId}
+          className="flex items-center gap-3 px-4 py-3 cursor-pointer"
+          style={
+            selectedUserBackground === conv.otherUser?.clerkId
+              ? {
+                  backgroundColor:
+                    resolvedTheme === "light" ? "whitesmoke" : "black",
+                }
+              : undefined
+          }
+          onClick={() => {
+            onSelectChat();
+            conv && onUserSelected(conv.otherUser as UserModel);
+          }}
+        >
+          <img
+            src={
+              conv?.otherUser?.imageUrl
+                ? conv.otherUser.imageUrl
+                : "/images/avtaar.avif"
+            }
+            className="w-10 h-10 rounded-full"
+          />
 
-        <div className="flex-1">
-          <div className="flex justify-between">
-            <h2 className="font-medium">Priti</h2>
-            <span className="text-xs" style={{ color: "var(--text-muted)" }}>
-              8:05 am
-            </span>
+          <div className="flex-1">
+            <div className="flex justify-between">
+              <h2 className="font-medium">{conv?.otherUser?.name}</h2>
+
+              <span className="text-xs" style={{ color: "var(--text-muted)" }}>
+                {DateFormatter(conv?.lastMessageTime)}
+              </span>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <p
+                className="text-sm truncate w-55"
+                style={{
+                  color:
+                    conv?.otherUser?.typingInConversation ===
+                    conv.conversationId
+                      ? "blue" // 🔵 blue when typing
+                      : "var(--text-secondary)",
+                }}
+              >
+                {conv?.otherUser?.typingInConversation === conv.conversationId
+                  ? conv?.otherUser?.name + " is Typing..."
+                  : conv?.lastMessage?.text}
+              </p>
+
+              {conv.unreadCount > 0 && (
+                <span className="font-bold w-6 h-6 rounded-full bg-pink-700 text-white flex justify-center text-[13px] align-middle">
+                  {conv.unreadCount}
+                </span>
+              )}
+
+              {conv.otherUser && getUserStatus(conv.otherUser.lastSeen) && (
+                <span className="w-3 h-3 rounded-full bg-green-500"></span>
+              )}
+            </div>
           </div>
-
-          <p
-            className="text-sm truncate"
-            style={{ color: "var(--text-secondary)" }}
-          >
-            Ticket 23rd April 2025.pdf
-          </p>
         </div>
-      </div>
+      ))}
     </div>
   );
 }

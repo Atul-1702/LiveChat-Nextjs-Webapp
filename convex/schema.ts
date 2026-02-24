@@ -21,17 +21,18 @@ export default defineSchema({
     .index("by_user1", ["user1"])
     .index("by_user2", ["user2"]),
   conversation_members: defineTable({
-    convesationId: v.id("conversations"),
+    conversationId: v.id("conversations"),
     userId: v.id("users"),
     unreadCount: v.number(),
     createdAt: v.number(),
   })
     .index("by_user", ["userId"])
-    .index("by_converstion", ["convesationId"]),
+    .index("by_conversation", ["conversationId"]),
   messages: defineTable({
     conversationId: v.id("conversations"),
     senderId: v.id("users"),
     text: v.optional(v.string()),
+    isSeen: v.boolean(),
     createdAt: v.number(),
   }).index("by_conversation", ["conversationId"]),
 });

@@ -2,17 +2,23 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import toast from "react-hot-toast";
+import { api } from "../../../convex/_generated/api";
+import { useMutation } from "convex/react";
+import { useUser } from "@clerk/nextjs";
 
 export default function ProfileModal({
   open,
   onClose,
   initialName = "",
   initialImage = "",
-  onSave,
 }) {
   const [name, setName] = useState(initialName);
   const [imagePreview, setImagePreview] = useState(initialImage);
-
+  const [fileUrl, setFileUrl] = useState();
+  const generateUploadUrl = useMutation(api.files.generateUploadUrl);
+  const updateUserProfile = useMutation(api.users.updateUserProfile);
+  const { user } = useUser();
   if (!open) return null;
 
   const handleImageChange = (e) => {
@@ -21,12 +27,40 @@ export default function ProfileModal({
 
     const url = URL.createObjectURL(file);
     setImagePreview(url);
+    setFileUrl(file);
   };
 
-  const handleSave = () => {
-    onClose();
+  const handleSave = async () => {
+    toast.loading("Profile updating...");
+    if (!imagePreview || !name) {
+      toast.error("All details are required.");
+      return;
+    }
+    const uploadUrl = await generateUploadUrl();
+
+    const result = await fetch(uploadUrl, {
+      method: "post",
+      headers: { "Content-Type": fileUrl?.type },
+      body: fileUrl,
+    });
+
+    const data = await result.json();
+    let storageId = data.storageId;
+    try {
+      await updateUserProfile({
+        clerkId: user.id,
+        name: name,
+        imageUrl: storageId,
+      });
+      toast.dismiss();
+      toast.success("Profile updated!");
+      onClose();
+    } catch (err) {
+      toast.error("Failed to update profile");
+      console.error(err);
+    }
   };
-  console.log(initialName);
+
   const isEditMode = !!initialName && !!initialImage;
 
   return (
@@ -41,15 +75,13 @@ export default function ProfileModal({
           {isEditMode ? "Update Profile" : "Create Profile"}
         </h2>
 
-        {/* Profile Image */}
         <div className="flex flex-col items-center gap-3 mb-6">
           <div className="relative w-28 h-28">
             {imagePreview ? (
-              <Image
+              <img
                 src={imagePreview}
                 alt="profile"
-                fill
-                className="rounded-full object-cover border border-neutral-300 dark:border-neutral-700"
+                className="rounded-full object-cover border border-neutral-300 dark:border-neutral-700 w-28 h-28"
               />
             ) : (
               <div className="w-full h-full rounded-full bg-neutral-300 dark:bg-neutral-700 flex items-center justify-center text-3xl">
