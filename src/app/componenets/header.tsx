@@ -52,7 +52,7 @@ export default function Header() {
   return (
     <div>
       <header
-        className="h-18 px-6  flex items-center justify-between border-b relative z-1"
+        className="h-18 px-2 sm:px-6  flex items-center justify-between border-b relative z-1"
         style={{
           background: "var(--bg-header-main)",
           color: "var(--header-text)",
@@ -69,7 +69,7 @@ export default function Header() {
             />
           </Link>
         </div>
-        <div className="flex gap:4 sm:gap-5 align-middle">
+        <div className="flex gap-5 align-middle">
           {!isSignedIn ? (
             <Link href={"/clerk-login"}>
               <button className="common-button w-27">
@@ -149,7 +149,7 @@ export default function Header() {
 
           <button
             onClick={toggleTheme}
-            className="mr-4 flex items-center justify-center sm:w-12 sm:h-12 h-10 w-10 rounded-full border shadow-sm transition hover:scale-105"
+            className="mr-2 sm:mr-4 flex items-center justify-center sm:w-12 sm:h-12 h-10 w-10 rounded-full border shadow-sm transition hover:scale-105"
             style={{
               background: "var(--bg-search)", // visible on both themes
               borderColor: "var(--border-default)",
