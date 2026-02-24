@@ -69,7 +69,7 @@ export default function Header() {
             />
           </Link>
         </div>
-        <div className="flex gap:3 sm:gap-5 align-middle">
+        <div className="flex gap:4 sm:gap-5 align-middle">
           {!isSignedIn ? (
             <Link href={"/clerk-login"}>
               <button className="common-button w-27">
