@@ -69,7 +69,7 @@ export default function Header() {
             />
           </Link>
         </div>
-        <div className="flex gap-5 align-middle">
+        <div className="flex gap:3 sm:gap-5 align-middle">
           {!isSignedIn ? (
             <Link href={"/clerk-login"}>
               <button className="common-button w-27">
@@ -149,7 +149,7 @@ export default function Header() {
 
           <button
             onClick={toggleTheme}
-            className="mr-4 flex items-center justify-center sm:w-12 sm:h-12 h-8 w-8 rounded-full border shadow-sm transition hover:scale-105"
+            className="mr-4 flex items-center justify-center sm:w-12 sm:h-12 h-10 w-10 rounded-full border shadow-sm transition hover:scale-105"
             style={{
               background: "var(--bg-search)", // visible on both themes
               borderColor: "var(--border-default)",
