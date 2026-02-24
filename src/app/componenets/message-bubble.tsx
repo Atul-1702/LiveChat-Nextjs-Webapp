@@ -1,20 +1,29 @@
-function MessageBubble({ msg }) {
-  const isMe = msg.sender === "me";
+import { DateFormatter } from "../utils/date-formatter";
+
+function MessageBubble({ msg, userId }) {
+  const isMe = msg.senderId === userId;
 
   const ticks = () => {
-    if (!isMe) return null;
-    if (msg.status === "sent")
-      return <span style={{ color: "var(--tick-sent)" }}>✓</span>;
-    if (msg.status === "delivered")
-      return <span style={{ color: "var(--tick-delivered)" }}>✓✓</span>;
-    if (msg.status === "read")
-      return <span style={{ color: "var(--tick-read)" }}>✓✓</span>;
+    if (msg.isSeen === true)
+      return (
+        <span
+          style={{
+            color: "var(--tick-read)",
+            fontWeight: "bold",
+            marginLeft: 4,
+          }}
+        >
+          ✓✓
+        </span>
+      );
   };
 
   return (
-    <div className={`flex ${isMe ? "justify-end" : "justify-start"}`}>
+    <div
+      className={`flex ${isMe ? "justify-end" : "justify-start"} flex-1 flex-wrap`}
+    >
       <div
-        className="max-w-xs px-4 py-2 rounded-lg"
+        className="max-w-xs px-4 py-2 rounded-lg wrap-break-word"
         style={{
           background: isMe ? "var(--bubble-sent)" : "var(--bubble-received)",
           color: "var(--text-primary)",
@@ -24,10 +33,10 @@ function MessageBubble({ msg }) {
         {msg.text}
 
         <div
-          className="text-xs mt-1 flex justify-end gap-1"
+          className="text-w-s mt-1 flex justify-end gap-1"
           style={{ color: "var(--text-muted)" }}
         >
-          {msg.time} {ticks()}
+          {DateFormatter(msg.createdAt)} {msg.senderId == userId && ticks()}
         </div>
       </div>
     </div>

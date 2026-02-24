@@ -44,7 +44,7 @@
   /* ===== TICKS ===== */
   --tick-sent: #6b7280;
   --tick-delivered: #6b7280;
-  --tick-read: #3b82f6;
+  --tick-read: #0963f3;
 
   --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.08);
 
@@ -55,49 +55,45 @@
   --dropdown-hover: #e9edef;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --title: #f9fafb;
-    --text-primary: #f3f4f6;
-    --text-secondary: #9ca3af;
-    --text-muted: #6b7280;
+.dark {
+  --title: #f9fafb;
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
 
-    --bg-sidebar: #111827;
-    --bg-hover: #1f2937;
-    --bg-search: #1f2937;
-    --bg-pill: #1f2937;
-    --bg-pill-hover: #374151;
+  --bg-sidebar: #111827;
+  --bg-hover: #1f2937;
+  --bg-search: #1f2937;
+  --bg-pill: #1f2937;
+  --bg-pill-hover: #374151;
 
-    --bg-chat: #0b141a;
-    --bg-header: #111827;
-    --bg-input: #202c33;
+  --bg-chat: #0b141a;
+  --bg-header: #111827;
+  --bg-input: #202c33;
 
-    --bubble-sent: #005c4b;
-    --bubble-received: #202c33;
+  --bubble-sent: #005c4b;
+  --bubble-received: #202c33;
 
-    --border-default: #374151;
-    --border-input: #2a2b32;
+  --border-default: #374151;
+  --border-input: #2a2b32;
 
-    --input-bg: #1f1f23;
+  --input-bg: #1f1f23;
 
-    --icon-color: #d1d5db;
+  --icon-color: #d1d5db;
 
-    --date-bg: rgba(255, 255, 255, 0.08);
-    --date-text: #d1d5db;
+  --date-bg: rgba(255, 255, 255, 0.08);
+  --date-text: #d1d5db;
+  --tick-read: #60a5fa;
 
-    --tick-sent: #9ca3af;
-    --tick-delivered: #9ca3af;
-    --tick-read: #60a5fa;
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.5);
 
-    --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --bg-header-main: #111827;
+  --header-text: #f3f4f6;
 
-    --bg-header-main: #111827;
-    --header-text: #f3f4f6;
-
-    --dropdown-bg: #1f2937;
-    --dropdown-hover: #374151;
-  }
+  --dropdown-bg: #1f2937;
+  --dropdown-hover: #374151;
 }
+
 .common-button {
   border-radius: 12px;
   background: #fb5650;

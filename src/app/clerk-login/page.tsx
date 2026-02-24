@@ -14,7 +14,14 @@ export default function ClerkLoginPage() {
   }, [isLoaded, isSignedIn, router]);
 
   return (
-    <div className="flex justify-center mt-16">
+    <div
+      className="flex justify-center pt-16  h-[90vh]"
+      style={{
+        backgroundImage: "url('/images/quick-chat-app-background.jpg')",
+        opacity: 0.8,
+        backgroundPosition: "cover",
+      }}
+    >
       <SignIn fallbackRedirectUrl="/" />
     </div>
   );

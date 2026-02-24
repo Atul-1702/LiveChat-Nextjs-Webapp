@@ -11,7 +11,6 @@ export default function Home() {
   const { isSignedIn, user, isLoaded } = useUser();
   const createUser = useMutation(api.users.createUser);
   useEffect(() => {
-    console.log("data");
     if (!isLoaded || !isSignedIn || !user) return;
 
     const data = createUser({
