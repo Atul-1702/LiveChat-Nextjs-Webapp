@@ -52,7 +52,7 @@ export default function Header() {
   return (
     <div>
       <header
-        className="h-18 px-2 sm:px-6  flex items-center justify-between border-b relative z-1"
+        className="h-18 px-6  flex items-center justify-between border-b relative z-1"
         style={{
           background: "var(--bg-header-main)",
           color: "var(--header-text)",
