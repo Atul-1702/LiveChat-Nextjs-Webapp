@@ -52,7 +52,7 @@ export default function Header() {
   return (
     <div>
       <header
-        className="h-18 px-6 flex items-center justify-between border-b relative z-1"
+        className="h-18 px-2 sm:px-6 flex items-center justify-between border-b relative z-1"
         style={{
           background: "var(--bg-header-main)",
           color: "var(--header-text)",
@@ -149,7 +149,7 @@ export default function Header() {
 
           <button
             onClick={toggleTheme}
-            className="mr-4 flex items-center justify-center w-12 h-12 rounded-full border shadow-sm transition hover:scale-105"
+            className="mr-4 flex items-center justify-center sm:w-12 sm:h-12 w-8 h-8  rounded-full border shadow-sm transition hover:scale-105"
             style={{
               background: "var(--bg-search)", // visible on both themes
               borderColor: "var(--border-default)",
