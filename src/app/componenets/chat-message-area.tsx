@@ -113,7 +113,6 @@ function ChatMessageArea({ onBack, selectedUser }: ChatMessageAreaProp) {
     }
   }
 
-  // ⭐ EMPTY STATE UI (no chat selected)
   if (!selectedUser) {
     return (
       <div
@@ -171,6 +170,7 @@ function ChatMessageArea({ onBack, selectedUser }: ChatMessageAreaProp) {
           <div className="font-semibold">{selectedUser.name}</div>
 
           {otherUser &&
+            allMessages.length > 0 &&
             otherUser?.typingInConversation ===
               allMessages?.[0]?.conversationId && (
               <div className="text-sm text-gray-500">

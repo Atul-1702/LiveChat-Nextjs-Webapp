@@ -181,7 +181,9 @@ function ChatSidebar({ onSelectChat, setSelectedUser }: ChatSidebarProps) {
                       : "var(--text-secondary)",
                 }}
               >
-                {conv?.otherUser?.typingInConversation === conv.conversationId
+                {conv.otherUser &&
+                conv.conversationId &&
+                conv?.otherUser?.typingInConversation === conv.conversationId
                   ? conv?.otherUser?.name + " is Typing..."
                   : conv?.lastMessage?.text}
               </p>

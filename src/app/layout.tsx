@@ -11,9 +11,6 @@ import localFont from "next/font/local";
 import { ThemeProvider } from "next-themes";
 import Header from "./componenets/header";
 import { Toaster } from "react-hot-toast";
-import { useQuery } from "convex/react";
-import { api } from "../../convex/_generated/api";
-import { usePresence } from "./hooks/usePresence";
 
 const SFPROTEXTFont = localFont({
   src: [
