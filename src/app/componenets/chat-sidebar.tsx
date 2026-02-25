@@ -119,7 +119,10 @@ function ChatSidebar({ onSelectChat, setSelectedUser }: ChatSidebarProps) {
                     setFilteredUser([]);
                   }}
                 >
-                  <img src={c.imageUrl} className="w-10 h-10 rounded-full" />
+                  <img
+                    src={c.imageUrl ?? "/images/avtaar.avif"}
+                    className="w-10 h-10 rounded-full"
+                  />
                   <span className="font-medium">{c.name}</span>
                 </div>
               ))
@@ -177,7 +180,7 @@ function ChatSidebar({ onSelectChat, setSelectedUser }: ChatSidebarProps) {
                   color:
                     conv?.otherUser?.typingInConversation ===
                     conv.conversationId
-                      ? "blue" // 🔵 blue when typing
+                      ? "blue"
                       : "var(--text-secondary)",
                 }}
               >

@@ -164,7 +164,10 @@ function ChatMessageArea({ onBack, selectedUser }: ChatMessageAreaProp) {
           />
         </button>
 
-        <img src={selectedUser.imageUrl} className="w-12 h-12 rounded-full" />
+        <img
+          src={selectedUser.imageUrl ?? "/images/avtaar.avif"}
+          className="w-12 h-12 rounded-full"
+        />
 
         <div className="flex flex-col">
           <div className="font-semibold">{selectedUser.name}</div>
